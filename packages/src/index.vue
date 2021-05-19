@@ -73,13 +73,13 @@ export default {
       } else {
         touch = event;
       }
-      //组织默认事件，防止body滑动
+      // 阻止默认事件，防止body滑动
       event.preventDefault();
       this.nx = touch.clientX - this.position.x;
       this.ny = touch.clientY - this.position.y;
       this.xPum = this.dx + this.nx;
       this.yPum = this.dy + this.ny;
-      //边界判断
+      // 边界判断
       this.xPum = this.xPum > 0 ? this.xPum : 0;
       this.yPum = this.yPum > 0 ? this.yPum : 0;
       this.xPum = this.xPum > this.w - this.x ? this.w - this.x : this.xPum;
