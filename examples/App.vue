@@ -1,29 +1,34 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <draggable-button>
-      <img alt="Vue logo" @click="clickHandler" src="./assets/logo.png">
-      <div @click="clickHandler">drag it ↑</div>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <draggable-button :isClick.sync="btnIsClick">
+      <img alt="Vue logo" @click="clickHandler" src="./assets/logo.png" />
+      <div @click.stop="clickHandler">drag it ↑</div>
     </draggable-button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import HelloWorld from "./components/HelloWorld.vue";
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      btnIsClick: false,
+    };
+  },
   components: {
-    HelloWorld
+    HelloWorld,
   },
   methods: {
-    clickHandler(){
-      alert("Hi!")
-    }
+    clickHandler() {
+      if (this.btnIsClick) {
+        alert("Hi!");
+      }
+    },
   },
-
-}
+};
 </script>
 
 <style>
