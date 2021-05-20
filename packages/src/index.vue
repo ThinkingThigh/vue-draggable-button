@@ -1,5 +1,5 @@
 <template>
-  <div id="pic" class="backIcon">
+  <div ref="pic" id="pic" class="backIcon" :isClick="isClick">
     <slot></slot>
     <slot name="list" v-bind:isTop="isTop"></slot>
   </div>
@@ -27,6 +27,10 @@ export default {
   data() {
     return {
       isTop: true,
+      flag: false,
+      isClick: false,
+      firstTime: "",
+      lastTime: "",
       position: { x: 0, y: 0 },
       nx: "",
       ny: "",
@@ -48,12 +52,17 @@ export default {
     this.y = moveDiv.offsetHeight;
     moveDiv.addEventListener("touchstart", this.down, { passive: false });
     moveDiv.addEventListener("touchmove", this.move, { passive: false });
+    document.addEventListener("mousemove", this.move, { passive: false });
+    moveDiv.addEventListener("mousedown", this.down, { passive: false });
+    moveDiv.addEventListener("mouseup", this.end, { passive: false });
+    moveDiv.addEventListener("touchend", this.end, { passive: false });
   },
   methods: {
     // 实现移动端拖拽
     down() {
       let moveDiv = document.querySelector("#pic");
       var touch;
+      this.flag = true;
       if (event.touches) {
         touch = event.touches[0];
       } else {
@@ -63,31 +72,44 @@ export default {
       this.position.y = touch.clientY;
       this.dx = moveDiv.offsetLeft; //左偏移量
       this.dy = moveDiv.offsetTop; //上移量
+      this.firstTime = new Date().getTime();
     },
     move() {
-      this.$emit("updateIsShowPop", false);
-      let moveDiv = document.querySelector("#pic");
-      var touch;
-      if (event.touches) {
-        touch = event.touches[0];
-      } else {
-        touch = event;
-      }
-      //组织默认事件，防止body滑动
-      event.preventDefault();
-      this.nx = touch.clientX - this.position.x;
-      this.ny = touch.clientY - this.position.y;
-      this.xPum = this.dx + this.nx;
-      this.yPum = this.dy + this.ny;
-      //边界判断
-      this.xPum = this.xPum > 0 ? this.xPum : 0;
-      this.yPum = this.yPum > 0 ? this.yPum : 0;
-      this.xPum = this.xPum > this.w - this.x ? this.w - this.x : this.xPum;
-      this.yPum = this.yPum > this.h - this.y ? this.h - this.y : this.yPum;
+      if (this.flag) {
+        this.$emit("updateIsShowPop", false);
+        let moveDiv = document.querySelector("#pic");
+        var touch;
+        if (event.touches) {
+          touch = event.touches[0];
+        } else {
+          touch = event;
+        }
+        //组织默认事件，防止body滑动
+        event.preventDefault();
+        this.nx = touch.clientX - this.position.x;
+        this.ny = touch.clientY - this.position.y;
+        this.xPum = this.dx + this.nx;
+        this.yPum = this.dy + this.ny;
+        //边界判断
+        this.xPum = this.xPum > 0 ? this.xPum : 0;
+        this.yPum = this.yPum > 0 ? this.yPum : 0;
+        this.xPum = this.xPum > this.w - this.x ? this.w - this.x : this.xPum;
+        this.yPum = this.yPum > this.h - this.y ? this.h - this.y : this.yPum;
 
-      moveDiv.style.left = this.xPum + "px";
-      moveDiv.style.top = this.yPum + "px";
-      this.isTop = this.yPum > window.innerHeight / 2;
+        moveDiv.style.left = this.xPum + "px";
+        moveDiv.style.top = this.yPum + "px";
+        this.isTop = this.yPum > window.innerHeight / 2;
+      }
+    },
+    end() {
+      this.lastTime = new Date().getTime();
+      if (this.lastTime - this.firstTime < 200) {
+        this.isClick = true;
+      } else {
+        this.isClick = false;
+      }
+      this.$emit("update:isClick", this.isClick);
+      this.flag = false;
     },
   },
 };
