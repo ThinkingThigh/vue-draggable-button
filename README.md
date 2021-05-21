@@ -66,3 +66,8 @@ export default {
 ```
 
 <img height="400" src="https://github.com/ThinkingThigh/vue-draggable-button/blob/main/examples/assets/drag.gif?raw=true">
+
+
+## CHANGELOG
+
+[CHANGELOG.md](https://github.com/ThinkingThigh/vue-draggable-button/blob/main/CHANGELOG.md)
