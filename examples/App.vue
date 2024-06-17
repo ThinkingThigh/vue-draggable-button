@@ -3,7 +3,7 @@
     <img alt="Vue logo" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js App" />
     <draggable-button :isClick.sync="btnIsClick">
-      <img alt="Vue logo" @click="clickHandler" src="./assets/logo.png" />
+      <img alt="Vue logo" :draggable="false" @click="clickHandler" src="./assets/logo.png" />
       <div @click.stop="clickHandler">drag it ↑</div>
     </draggable-button>
   </div>
