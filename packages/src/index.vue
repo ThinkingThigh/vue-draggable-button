@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     // 实现移动端拖拽
-    down() {
+    down(event) {
       let moveDiv = document.querySelector("#pic");
       var touch;
       this.flag = true;
@@ -74,7 +74,7 @@ export default {
       this.dy = moveDiv.offsetTop; //上移量
       this.firstTime = new Date().getTime();
     },
-    move() {
+    move(event) {
       if (this.flag) {
         this.$emit("updateIsShowPop", false);
         let moveDiv = document.querySelector("#pic");
